@@ -1,3 +1,4 @@
 jasonC -- 2024-12-2 11:47
  - Updated design doc. Further specification of site functionality, updated target ship date, added new feature allowing users to upload images for recognition.
  - Added heading and roster to README.
+ - Uploaded newest design doc to repo.
