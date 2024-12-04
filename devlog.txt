@@ -5,3 +5,6 @@ jasonC -- 2024-12-2 11:47
 
 leonH -- 2024-12-3 11:01
  - Updated README with project description, install guide, and launch codes.
+
+jasonC -- 2024-12-4 12:08
+ - Updated app/keys/readme with API key status.
