@@ -1,5 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os, urllib.request, json
+from __future__ import print_function
+import time
+import cloudmersive_image_api_client
+from cloudmersive_image_api_client.rest import ApiException
+from pprint import pprint
 
 # Load API keys
 def load_api_keys():
