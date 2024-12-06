@@ -9,7 +9,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os
 import sqlite3
-from database import create_db, add_user, return_user   
+from database import create_db, add_user, return_user
 
 
 db_filename = "apis.db"
@@ -33,7 +33,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-    
+
         user = return_user(username)
 
         if user and user[2] == password:  # Match plaintext password
@@ -51,17 +51,21 @@ def register():
         password = request.form["password"]
 
         existing_user = return_user(username)
-        
+
         if existing_user:
             error_message = "User already in database"
             return render_template("register.html", error_message=error_message)
-        
+
         add_user(username, password)
 
         session["username"] = username
         return redirect(url_for("home"))
 
     return render_template("register.html")
+
+@app.route('/apiresults')
+def apiresults():
+    return render_template("apiresults.html")
 
 @app.route('/logout')
 def logout():

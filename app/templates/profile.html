@@ -15,9 +15,28 @@
 
   <body>
     <header>
-
+    <nav>
+      <ul>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </ul>
+    </nav>
     </header>
-
+<!-- below will be the somewhat starter code for the history of images until db is finished -->
+    <main>
+      <h1>Profile information</h1>
+      <section class="past-image-list">
+        {% for image in images}
+        <div class="detection-summary">
+          <h2>{{ image[0] }}</h2>
+          <p><strong>Image:</strong> {{ image[2] }} | <strong>Date:</strong> {{ image[3] }}</p>
+          <p>{{ image[1] }}<p>
+          <a href="{{ url for('imageView', title=image[0]) }}">View more</a>
+        </div>
+        {% else %}
+        <p>No past history to display.</p>
+        {% endfor %}
+    </main>
   </body>
 
   <footer>
