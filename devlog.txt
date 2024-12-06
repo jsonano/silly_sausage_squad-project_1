@@ -27,4 +27,7 @@ alexL -- 2024-12-5 10:50
  - implemented login/logout functionality (middleware)
  - created templates for login/logout/updated home 
  - routed home, login, and logout to flask app
- 
+
+alexL -- 2024-12-6 10:45
+ - added a prototype version for past history profile.html
+ - began api_results.html 
