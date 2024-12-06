@@ -1,2 +1,4 @@
 *.ipynb
 app/ipynb_checkpoints
+
+app/apis.db
