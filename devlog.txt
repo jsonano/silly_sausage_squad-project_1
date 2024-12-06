@@ -19,3 +19,6 @@ jasonC -- 2024-12-4 10:17
 stanleyH -- 2024-12-5 8:13
  - Created functions in the api_handler.py file to make requests to our APIs and retrieve their data
  - Created Flask app shell
+
+jasonC -- 2024-12-5 10:13
+ - Implemented function to add API requests to DB
