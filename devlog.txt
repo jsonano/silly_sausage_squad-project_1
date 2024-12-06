@@ -22,3 +22,9 @@ stanleyH -- 2024-12-5 8:13
 
 jasonC -- 2024-12-5 10:13
  - Implemented function to add API requests to DB
+
+alexL -- 2024-12-5 10:50
+ - implemented login/logout functionality (middleware)
+ - created templates for login/logout/updated home 
+ - routed home, login, and logout to flask app
+ 
