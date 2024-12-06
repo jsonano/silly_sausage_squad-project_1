@@ -17,16 +17,29 @@
     <header>
       <h1>Welcome, {{username}}!</h1>
       <nav>
-        <a href="{{ url for('home') }}">Home</a>
-        <a href="{{ url for('home') }}">Profile</a>
-        <a href="{{ url for('home') }}">Logout</a>
+        <ul>
+          <a href="{{ url_for('home') }}">Home</a>
+          
+        </ul>
       </nav>
     </header>
+
+    <main>
+      <section>
+        <h2>Overview</h2>
+        <p>Welcome to sIlLySaUsAgEsQuAD's app</p>
+        <ul>
+          <li>Upload or generate images using the Unsplash API.</li>
+          <li>Analyze images to identify objects and their definitions.</li>
+          <li>Manage your profile and history.</li>
+        </ul>
+      </section>
+    </main>
 
   </body>
 
   <footer>
-    sIlLySaUsAgEsQuAD 2024
+    <p>sIlLySaUsAgEsQuAD 2024</p>
   </footer>
 
 
