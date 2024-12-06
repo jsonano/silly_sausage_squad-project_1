@@ -43,12 +43,12 @@ def return_user(user):
     c = db.cursor()
     try:
         c.execute("SELECT * FROM logins WHERE username=:username", {"username": user})
-        info = c.fetchone()
-        print(info)
-        db.commit()
+        user_info = c.fetchone()
     except:
         print("Username does not exist.")
+        user_info = None
     db.close()
+    return user_info
     
 def add_api_request(api_name, request, response):
     db = sqlite3.connect(db_filename)
