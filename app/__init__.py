@@ -1,4 +1,4 @@
-# Stanley Hoo, Jacob Lukose, Naomi Lai, Colyi Chen
+# Stanley Hoo, Alex Luo, Leon Huang, Jason Chao
 # sIlLySaUsAgEsQuAD
 # SoftDev
 # P01: ArRESTed Development
