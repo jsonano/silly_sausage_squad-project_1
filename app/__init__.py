@@ -10,10 +10,7 @@ from flask import Flask, request, render_template, redirect, url_for, flash, ses
 import os
 import sqlite3
 from database import create_db, add_user, return_user
-<<<<<<< HEAD
 from api_handler import get_api_data, run_api_program
-=======
->>>>>>> 5d4a7bb9327476865df91e249c63a829fca0b9cc
 
 
 db_filename = "apis.db"
