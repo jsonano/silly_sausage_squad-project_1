@@ -1,76 +1,111 @@
+from flask import request, flash, session
 import sqlite3
+import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
-db_filename = "apis.db"
+# Database path setup
+DB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'apis.db')
+
+# connext to database
+def get_db_connection():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row  # So I can access dictionary items using their column name instead of indexing
+    return conn
 
 def create_db():
-    db = sqlite3.connect(db_filename)
-    c = db.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     # USER LOGIN TABLE
-    c.execute('''
-    CREATE TABLE IF NOT EXISTS logins (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        password_hash TEXT NOT NULL
-    );
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL
+        );
     ''')
 
     # API REQUEST/RESPONSE TABLE
-    c.execute('''
+    cur.execute('''
     CREATE TABLE IF NOT EXISTS apis (
         request_id INTEGER PRIMARY KEY AUTOINCREMENT,
         api_name TEXT NOT NULL,
-        request TEXT NOT NULL,
+        request DEFAULT NULL,
         response TEXT,
         user_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
     );
     ''')
-    db.commit()
-    db.close()
+    conn.commit()
+    conn.close()
 
 def add_user(username, password_hash):
-    db = sqlite3.connect(db_filename)
-    c = db.cursor()
-    try:
-        c.execute("INSERT INTO logins (username, password_hash) VALUES (?, ?)", (username, password_hash))
-    except:
-        print("Username already exists.")
-    db.commit()
-    db.close()
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        password_hash = generate_password_hash(password)
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            # Insert new user into the database
+            cur.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (username, password_hash))
+            conn.commit()
+            flash('Registration successful!', 'success')
+        except sqlite3.IntegrityError:
+            flash('Username already exists!', 'error')
+        finally:
+            conn.close()
+            
+def login_user():
+     if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = get_db_connection()
+        cur = conn.cursor()
+        # Retrieve hashed password for the given username
+        cur.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
+        user_password_hash = cur.fetchone()
+        conn.close()
+
+        # Checks hashed user password against database
+        if user_password_hash and check_password_hash(user_password_hash['password_hash'], password):
+            session['username'] = username
+            flash('Login successful!', 'success')
+        else:
+            flash('Invalid username or password!', 'error')
 
 def return_user(user):
-    db = sqlite3.connect(db_filename)
-    c = db.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     try:
-        c.execute("SELECT * FROM logins WHERE username=:username", {"username": user})
-        user_info = c.fetchone()
+        cur.execute("SELECT * FROM logins WHERE username=?", (user))
+        user_info = cur.fetchone()
     except:
         print("Username does not exist.")
         user_info = None
-    db.close()
+    conn.close()
     return user_info
     
 def add_api_request(api_name, request, response):
-    db = sqlite3.connect(db_filename)
-    c = db.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     try:
-        c.execute("INSERT INTO apis (api_name, request, response) VALUES (?, ?, ?)", (api_name, request, response))
+        cur.execute("INSERT INTO apis (api_name, request, response) VALUES (?, ?, ?)", (api_name, request, response))
     except:
         print("Error adding API request.")
-    db.commit()
-    db.close()
+    conn.commit()
+    conn.close()
     
 def return_api_request(api_name): # not functional
-    db = sqlite3.connect(db_filename)
-    c = db.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     try:
-        c.execute("SELECT * FROM apis WHERE api_name=:api_name", {"api_name": api_name})
-        info = c.fetchone()
+        cur.execute("SELECT * FROM apis WHERE api_name = ?", api_name)
+        info = cur.fetchone()
         print(info)
-        db.commit()
+        conn.commit()
     except:
         print("API request does not exist.")
-    db.close()
+    conn.close()
 
 
 def testing():

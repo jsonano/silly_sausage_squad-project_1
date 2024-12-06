@@ -92,3 +92,5 @@ def run_api_program(user_image_url=None, image_file=None, search_request=None):
     # Gets the videos
     videos = get_api_data('pixabay', search=search_description)
     return image_url, description, videos
+
+unsplash, clarifai, pixabay = run_api_program
