@@ -19,7 +19,7 @@ def create_db():
     cur.execute('''
         CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL UNIQUE,
+            username TEXT NOT NULL,
             password_hash TEXT NOT NULL
         );
     ''')
@@ -38,70 +38,71 @@ def create_db():
     conn.commit()
     conn.close()
 
-def add_user(username, password_hash):
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        password_hash = generate_password_hash(password)
+def add_user(user, password):
+    # if request.method == 'POST':
+    #     username = request.form['username']
+    #     password = request.form['password']
+        pw_hash = generate_password_hash(password)
         try:
             conn = get_db_connection()
             cur = conn.cursor()
             # Insert new user into the database
-            cur.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (username, password_hash))
+            cur.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (user, pw_hash,))
             conn.commit()
-            flash('Registration successful!', 'success')
-        except sqlite3.IntegrityError:
-            flash('Username already exists!', 'error')
+            # flash('Registration successful!', 'success')
+        # except sqlite3.IntegrityError:
+        #     flash('Username already exists!', 'error')
         finally:
             conn.close()
             
-def login_user():
-     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        conn = get_db_connection()
-        cur = conn.cursor()
-        # Retrieve hashed password for the given username
-        cur.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
-        user_password_hash = cur.fetchone()
-        conn.close()
+# def login_user():
+#      if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+#         conn = get_db_connection()
+#         cur = conn.cursor()
+#         # Retrieve hashed password for the given username
+#         cur.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
+#         user_password_hash = cur.fetchone()
+#         conn.close()
 
-        # Checks hashed user password against database
-        if user_password_hash and check_password_hash(user_password_hash['password_hash'], password):
-            session['username'] = username
-            flash('Login successful!', 'success')
-        else:
-            flash('Invalid username or password!', 'error')
+#         # Checks hashed user password against database
+#         if user_password_hash and check_password_hash(user_password_hash['password_hash'], password):
+#             session['username'] = username
+#             flash('Login successful!', 'success')
+#         else:
+#             flash('Invalid username or password!', 'error')
 
 def return_user(user):
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM logins WHERE username=?", (user))
+        cur.execute("SELECT * FROM users WHERE username=?", (user,))
         user_info = cur.fetchone()
     except:
         print("Username does not exist.")
         user_info = None
-    conn.close()
-    return user_info
+    finally:
+        conn.close()
+        return user_info
     
-def add_api_request(api_name, request, response):
+def add_api_request(username, api_name, request, response):
     conn = get_db_connection()
     cur = conn.cursor()
-    try:
-        cur.execute("INSERT INTO apis (api_name, request, response) VALUES (?, ?, ?)", (api_name, request, response))
-    except:
-        print("Error adding API request.")
+    cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
+    user_id = cur.fetchone()[0]
+    cur.execute("INSERT INTO apis (api_name, request, response, user_id) VALUES (?, ?, ?, ?)", (api_name, request, response, user_id))
     conn.commit()
     conn.close()
     
-def return_api_request(api_name): # not functional
+def return_api_request(api_name): # returns all api requests with the same name
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM apis WHERE api_name = ?", api_name)
-        info = cur.fetchone()
-        print(info)
+        cur.execute("SELECT * FROM apis WHERE api_name = ?", (api_name,))
+        for row in cur.fetchall():
+            print(row)
+        print(cur.fetchall())
         conn.commit()
     except:
         print("API request does not exist.")
@@ -113,13 +114,13 @@ def testing():
     add_user("admin", "password")
     add_user("jason", "chao")
     add_user("alex", "luo")
-    return_user("admin")
-    return_user("jason")
-    return_user("alex")
-    return_user("error")
-    add_api_request("weather", "GET", "Sunny")
-    add_api_request("weather", "POST", "Rainy")
-    add_api_request("weather", "GET", "Cloudy")
+    print(return_user("admin")[0])
+    print(return_user("jason")[0])
+    print(return_user("alex")[0])
+    print(return_user("error"))
+    add_api_request("admin", "weather", "GET", "Sunny")
+    add_api_request("admin", "weather", "POST", "Rainy")
+    add_api_request("admin", "weather", "GET", "Cloudy")
     return_api_request("weather")
     
-# testing()
+testing()
