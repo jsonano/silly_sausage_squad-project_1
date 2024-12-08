@@ -31,3 +31,7 @@ alexL -- 2024-12-5 10:50
 alexL -- 2024-12-6 10:45
  - added a prototype version for past history profile.html
  - began api_results.html 
+
+jasonC -- 2024-12-8 5:54
+ - Commented out DB functions that implemented Flask, which returned errors that there was no active session.
+ - Updated API DB functions. Returning API requests now returns all requests made by the same user.

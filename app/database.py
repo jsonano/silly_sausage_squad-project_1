@@ -28,13 +28,14 @@ def create_db():
     cur.execute('''
     CREATE TABLE IF NOT EXISTS apis (
         request_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        api_name TEXT NOT NULL,
         request DEFAULT NULL,
-        response TEXT,
+        response TEXT, 
         user_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
     );
     ''')
+    # requests are not required, only used if user inputs an image URL
+    # API response will be a dictionary containing all three APIs responses
     conn.commit()
     conn.close()
 
@@ -55,23 +56,23 @@ def add_user(user, password):
         finally:
             conn.close()
             
-# def login_user():
-#      if request.method == 'POST':
-#         username = request.form['username']
-#         password = request.form['password']
-#         conn = get_db_connection()
-#         cur = conn.cursor()
-#         # Retrieve hashed password for the given username
-#         cur.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
-#         user_password_hash = cur.fetchone()
-#         conn.close()
+def login_user():
+     if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        conn = get_db_connection()
+        cur = conn.cursor()
+        # Retrieve hashed password for the given username
+        cur.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
+        user_password_hash = cur.fetchone()
+        conn.close()
 
-#         # Checks hashed user password against database
-#         if user_password_hash and check_password_hash(user_password_hash['password_hash'], password):
-#             session['username'] = username
-#             flash('Login successful!', 'success')
-#         else:
-#             flash('Invalid username or password!', 'error')
+        # Checks hashed user password against database
+        if user_password_hash and check_password_hash(user_password_hash['password_hash'], password):
+            session['username'] = username
+            flash('Login successful!', 'success')
+        else:
+            flash('Invalid username or password!', 'error')
 
 def return_user(user):
     conn = get_db_connection()
@@ -86,27 +87,31 @@ def return_user(user):
         conn.close()
         return user_info
     
-def add_api_request(username, api_name, request, response):
+def add_api_request(username, request, response):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
     user_id = cur.fetchone()[0]
-    cur.execute("INSERT INTO apis (api_name, request, response, user_id) VALUES (?, ?, ?, ?)", (api_name, request, response, user_id))
+    cur.execute("INSERT INTO apis (request, response, user_id) VALUES (?, ?, ?)", (request, response, user_id)) 
     conn.commit()
     conn.close()
     
-def return_api_request(api_name): # returns all api requests with the same name
+def return_api_request(username): # returns all api requests under the same user
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM apis WHERE api_name = ?", (api_name,))
-        for row in cur.fetchall():
-            print(row)
-        print(cur.fetchall())
+        cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
+        user_id = cur.fetchone()[0]
+        cur.execute("SELECT * FROM apis WHERE user_id = ?", (user_id,))
         conn.commit()
+        return cur.fetchall()
+        # for row in cur.fetchall():
+        #     print(row)
+        # print(cur.fetchall())
     except:
         print("API request does not exist.")
-    conn.close()
+    finally:
+        conn.close()
 
 
 def testing():
@@ -114,13 +119,13 @@ def testing():
     add_user("admin", "password")
     add_user("jason", "chao")
     add_user("alex", "luo")
-    print(return_user("admin")[0])
-    print(return_user("jason")[0])
-    print(return_user("alex")[0])
+    print(return_user("admin"))
+    print(return_user("jason"))
+    print(return_user("alex"))
     print(return_user("error"))
-    add_api_request("admin", "weather", "GET", "Sunny")
-    add_api_request("admin", "weather", "POST", "Rainy")
-    add_api_request("admin", "weather", "GET", "Cloudy")
-    return_api_request("weather")
+    add_api_request("admin", "GET", "Sunny")
+    add_api_request("admin", "POST", "Rainy")
+    add_api_request("admin", "GET", "Cloudy")
+    print(return_api_request("admin"))
     
 testing()
