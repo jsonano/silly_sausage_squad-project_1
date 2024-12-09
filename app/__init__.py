@@ -48,8 +48,8 @@ def register():
         existing_user = return_user(username)
 
         if existing_user:
-            error_message = "User already in database"
-            return render_template("register.html", error_message=error_message)
+            flash('Username already taken, choose another one', 'error')
+            return render_template("register.html")
 
         add_user(username, password)
 

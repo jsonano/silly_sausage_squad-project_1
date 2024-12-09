@@ -15,6 +15,16 @@
 
   <body>
     <header>
+        <!-- Allows flashing messages in the html -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
     <nav>
       <ul>
         <a href="{{ url_for('home') }}">Home</a>
