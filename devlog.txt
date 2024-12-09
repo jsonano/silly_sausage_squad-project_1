@@ -36,15 +36,13 @@ jasonC -- 2024-12-8 5:54
  - Commented out DB functions that implemented Flask, which returned errors that there was no active session.
  - Updated API DB functions. Returning API requests now returns all requests made by the same user.
 
-<<<<<<< HEAD
+alexL -- 2024-12-8 23:00
+ - updated api_results and profile templates
+ - added routing for profile
+
 stanleyH -- 2024-12-8 23:39
  - Fixed clarifai API import bug
  - Added login and welcome container to home
  - Fixed some rendering issues
  - Added some css
  - Fixed some database functions to allow users to login
-=======
-alexL -- 2024-12-8 11
- - updated api_results and profile templates
- - added routing for profile
->>>>>>> eea74b2751f3e384e24c03786d254f3f36e5cc08
