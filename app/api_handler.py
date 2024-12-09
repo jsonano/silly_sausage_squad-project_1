@@ -24,8 +24,10 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
     urls = {'unsplash': f'https://api.unsplash.com/photos/random?client_id={api_keys["unsplash"]}', 
         'clarifai': f'https://clarifai.com/salesforce/blip/models/general-english-image-caption-blip',
         'pixabay': f'https://pixabay.com/api/videos/?key={api_keys["pixabay"]}&q={search}'}
+    # Clarifai url is unneccesary since we don't actually use it but whatever
     url = urls[api]
     # Different processes for each api
+    
     # Unsplash (get img)
     if api == 'unsplash':
         if params==None:
@@ -47,6 +49,7 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
             for result in data['results']:
                 img_links.append(result['urls']['regular'])
             return img_links  
+        
     # Clarifai (img to txt)
     elif api == 'clarifai':
         # Model code from clarifai api documentation
@@ -103,6 +106,7 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
         
         # Get the output
         return output.data.text.raw[len('a photograph of a '):]
+    
     # Pixabay (videos)
     else:
         video_links = []
@@ -134,4 +138,5 @@ def run_api_program(user_image_url=None, image_file=None, search_request=None):
     description = get_api_data('clarifai', image_url=image_url)
     search_description = description.replace(' ', '+')
     videos = get_api_data('pixabay', search=search_description)
+    # Returns url of the image, text caption of the image, and a list of 5 video urls that use the description as the search keywords
     return image_url, description, videos
