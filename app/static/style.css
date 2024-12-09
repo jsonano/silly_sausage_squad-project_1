@@ -1,0 +1,133 @@
+/* Style flash messages */
+.flash-messages {
+  position: fixed;
+  top: 20px; /* Distance from the top of the window */
+  left: 50%;
+  transform: translateX(-50%); /* Center the messages horizontally */
+  z-index: 1000; /* Ensure the messages appear above other content */
+  width: 90%; /* Adjust width as needed */
+  max-width: 600px; /* Set a max-width for better presentation */
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: #721c24;
+  opacity: 1; /* Fully visible */
+  transition: opacity 0.5s ease; /* Smooth transition for fading out */
+  animation: fadeOut 2s forwards; /* Apply the fade-out animation */
+}
+
+.flash-message {
+padding: 10px;
+margin-bottom: 10px;
+}
+
+.flash-message.error {
+background-color: #f8d7da;
+color: #721c24;
+}
+
+.flash-message.success {
+background-color: #d4edda;
+color: #155724;
+}
+
+/* Keyframes for fade-out animation */
+@keyframes fadeOut {
+  0% {
+      opacity: 1; /* Fully visible */
+  }
+  80% {
+      opacity: 1; /* Remain visible until near the end */
+  }
+  100% {
+      opacity: 0; /* Fully transparent */
+  }
+}
+
+
+.header {
+  text-align: left;
+}
+
+/* Container for the form elements */
+.login-form {
+padding: 10px;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+width: 200px;
+}
+
+/* Container for buttons */
+.button-container {
+display: flex;
+width: 100%;
+justify-content: space-between;
+gap: 10px;
+}
+
+/* General style for buttons */
+.login-form {
+    position: fixed; 
+    top: 0; 
+    right: 0; 
+    padding: 10px;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    width: 200px; 
+}
+
+.login-form button {
+flex: 1;
+padding: 8px 16px;
+border-radius: 20px;
+color: white;
+border: none;
+cursor: pointer;
+margin-bottom: 0;
+}
+
+/* Specific style for the login button */
+.login-btn {
+background-color: #007bff;
+}
+
+.login-btn:hover {
+background-color: #0056b3;
+}
+
+/* Specific style for the signup button */
+.signup-btn {
+background-color: #4CAF50;
+}
+
+.signup-btn:hover {
+background-color: #45a049;
+}
+
+/* Welcome Container */
+.welcome-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-bottom-left-radius: 8px;
+}
+
+.signout-btn {
+  background-color: #dc3545; 
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  margin-left: 10px;
+  border-radius: 4px;
+}
+
+.signout-btn:hover {
+  background-color: #bd2130;
+}

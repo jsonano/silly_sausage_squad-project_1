@@ -15,3 +15,35 @@ jasonC -- 2024-12-4 12:08
 
 jasonC -- 2024-12-4 10:17
  - Implemented creating and adding users to DBs
+
+stanleyH -- 2024-12-5 8:13
+ - Created functions in the api_handler.py file to make requests to our APIs and retrieve their data
+ - Created Flask app shell
+
+jasonC -- 2024-12-5 10:13
+ - Implemented function to add API requests to DB
+
+alexL -- 2024-12-5 10:50
+ - implemented login/logout functionality (middleware)
+ - created templates for login/logout/updated home 
+ - routed home, login, and logout to flask app
+
+alexL -- 2024-12-6 10:45
+ - added a prototype version for past history profile.html
+ - began api_results.html 
+
+jasonC -- 2024-12-8 5:54
+ - Commented out DB functions that implemented Flask, which returned errors that there was no active session.
+ - Updated API DB functions. Returning API requests now returns all requests made by the same user.
+
+alexL -- 2024-12-8 23:00
+ - updated api_results and profile templates
+ - added routing for profile
+
+stanleyH -- 2024-12-8 23:39
+ - Fixed clarifai API import bug
+ - Added login and welcome container to home
+ - Fixed some rendering issues
+ - Added some css
+ - Fixed some database functions to allow users to login
+ - Added flashing messages

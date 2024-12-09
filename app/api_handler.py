@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os, urllib.request, json
+from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
+from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
+from clarifai_grpc.grpc.api.status import status_code_pb2
 
 # Load API keys
 def load_api_keys():
@@ -15,16 +18,125 @@ def load_api_keys():
     return keys
 
 api_keys = load_api_keys()
-print(api_keys)
 
-urls = {'unsplash': f'https://api.unsplash.com/photos/?client_id={key}'}
-
-def get_api_data(url, key):
-    url = f'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&camera=fhaz&api_key={key}'
-    content = ''
-    # Makes a request for the data
-    response = urllib.request.urlopen(url)
-    data = json.loads(response.read())  # Decode and parse JSON data into dictionary
-    print(data)
+def get_api_data(api, params=None, image_url=None, search=None): # api --> api we want, params for unplash image, image_url for clarifai image analysis, search for pixabay videos
+    # Sets the urls
+    urls = {'unsplash': f'https://api.unsplash.com/photos/random?client_id={api_keys["unsplash"]}', 
+        'clarifai': f'https://clarifai.com/salesforce/blip/models/general-english-image-caption-blip',
+        'pixabay': f'https://pixabay.com/api/videos/?key={api_keys["pixabay"]}&q={search}'}
+    # Clarifai url is unneccesary since we don't actually use it but whatever
+    url = urls[api]
+    # Different processes for each api
     
-get_api_data(urls['unplash'], api_keys['unsplash'])
+    # Unsplash (get img)
+    if api == 'unsplash':
+        if params==None:
+            response = urllib.request.urlopen(url)
+            data = json.loads(response.read())  # Decode and parse JSON data into dictionary
+            return data['urls']['full']
+        else:
+            img_links = []
+            url = "https://api.unsplash.com/search/photos"
+            # Headers
+            headers = {
+                "Authorization": f"Client-ID {api_keys['unsplash']}"
+            }
+
+            # Send request
+            response = requests.get(url, headers=headers, params=params)
+            data = response.json()
+            
+            for result in data['results']:
+                img_links.append(result['urls']['regular'])
+            return img_links  
+        
+    # Clarifai (img to txt)
+    elif api == 'clarifai':
+        # Model code from clarifai api documentation
+        # Your PAT (Personal Access Token) can be found in the Account's Security section
+        PAT = api_keys['clarifai']
+        # Specify the correct user_id/app_id pairings
+        # Since you're making inferences outside your app's scope
+        USER_ID = "salesforce"
+        APP_ID = "blip"
+        # Change these to whatever model and image URL you want to use
+        MODEL_ID = "general-english-image-caption-blip"
+        MODEL_VERSION_ID = "cdb690f13e62470ea6723642044f95e4"
+        IMAGE_URL = image_url
+        # To use a local file, assign the location variable
+        # IMAGE_FILE_LOCATION = "YOUR_IMAGE_FILE_LOCATION_HERE"
+        
+        channel = ClarifaiChannel.get_grpc_channel()
+        stub = service_pb2_grpc.V2Stub(channel)
+
+        metadata = (("authorization", "Key " + PAT),)
+        # To use a local file, uncomment the following lines
+        # with open(IMAGE_FILE_LOCATION, "rb") as f:
+        #     file_bytes = f.read()
+
+        userDataObject = resources_pb2.UserAppIDSet(user_id=USER_ID, app_id=APP_ID)
+
+        post_model_outputs_response = stub.PostModelOutputs(
+            service_pb2.PostModelOutputsRequest(
+                user_app_id=userDataObject,  # The userDataObject is created in the overview and is required when using a PAT
+                model_id=MODEL_ID,
+                version_id=MODEL_VERSION_ID,  # This is optional. Defaults to the latest model version
+                inputs=[
+                    resources_pb2.Input(
+                        data=resources_pb2.Data(
+                            image=resources_pb2.Image(
+                                url=IMAGE_URL
+                                # base64=file_bytes
+                                )
+                            )
+                    )
+                ],
+            ),
+            metadata=metadata,
+        )
+        if post_model_outputs_response.status.code != status_code_pb2.SUCCESS:
+            print(post_model_outputs_response.status)
+            raise Exception(
+                "Post model outputs failed, status: "
+                + post_model_outputs_response.status.description
+            )
+
+        # Since we have one input, one output will exist here
+        output = post_model_outputs_response.outputs[0]
+        
+        # Get the output
+        return output.data.text.raw[len('a photograph of a '):]
+    
+    # Pixabay (videos)
+    else:
+        video_links = []
+        response = urllib.request.urlopen(url)
+        data = json.loads(response.read())  # Decode and parse JSON data into dictionary
+        hits = data['hits']
+        for vid in hits:
+            video_links.append(vid['videos']['large']['url'])
+        if data['totalHits'] < 5:
+            return video_links
+        else:
+            return video_links[:5]
+        
+def run_api_program(user_image_url=None, image_file=None, search_request=None):
+    if user_image_url != None:
+        image_url = user_image_url
+    elif image_file != None:
+        return
+    elif search_request != None:
+        # Search parameters
+        params = {
+            "query": search_request,
+            "page": 1,
+            "per_page": 5
+        }
+        return get_api_data('unsplash', params=params)
+    else:
+        image_url = get_api_data('unsplash')
+    description = get_api_data('clarifai', image_url=image_url)
+    search_description = description.replace(' ', '+')
+    videos = get_api_data('pixabay', search=search_description)
+    # Returns url of the image, text caption of the image, and a list of 5 video urls that use the description as the search keywords
+    return image_url, description, videos
