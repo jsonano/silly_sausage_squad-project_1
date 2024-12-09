@@ -46,3 +46,4 @@ stanleyH -- 2024-12-8 23:39
  - Fixed some rendering issues
  - Added some css
  - Fixed some database functions to allow users to login
+ - Added flashing messages
