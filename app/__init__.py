@@ -12,7 +12,7 @@ import sqlite3
 import urllib.request
 import json
 
-from database import create_db, add_user, return_user, add_api_request, return_api_request
+from database import create_db, add_user, login_user, return_user, add_api_request, return_api_request
 from api_handler import get_api_data, run_api_program
 
 
@@ -27,26 +27,17 @@ create_db()
 
 @app.route('/')
 def home():
-    if "username" in session:
-        return render_template("home.html", username=session["username"])
-    return redirect(url_for("login"))
+    if 'username' in session:
+        username = session['username']
+        return render_template('home.html', username=username)
+    return render_template('home.html')
 
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-
-        user = return_user(username)
-
-        if user and user[2] == password:  # Match plaintext password
-            session["username"] = username
-            return redirect(url_for("home"))
-        else:
-            return render_template("login.html", error_message="Invalid username or password")
-
-    return render_template("login.html")
+    if request.method == 'POST':
+        login_user()
+    return redirect(url_for('home'))
 
 @app.route('/register', methods=["GET", "POST"])
 def register():

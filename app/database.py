@@ -19,7 +19,7 @@ def create_db():
     cur.execute('''
         CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
+            username TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL
         );
     ''')
@@ -40,9 +40,10 @@ def create_db():
     conn.close()
 
 def add_user(user, password):
-    # if request.method == 'POST':
-    #     username = request.form['username']
-    #     password = request.form['password']
+    create_db()
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
         pw_hash = generate_password_hash(password)
         try:
             conn = get_db_connection()
@@ -56,8 +57,9 @@ def add_user(user, password):
         finally:
             conn.close()
             
+# Logs in user if username and password match
 def login_user():
-     if request.method == 'POST':
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         conn = get_db_connection()
@@ -112,20 +114,3 @@ def return_api_request(username): # returns all api requests under the same user
         print("API request does not exist.")
     finally:
         conn.close()
-
-
-def testing():
-    create_db()
-    add_user("admin", "password")
-    add_user("jason", "chao")
-    add_user("alex", "luo")
-    print(return_user("admin"))
-    print(return_user("jason"))
-    print(return_user("alex"))
-    print(return_user("error"))
-    add_api_request("admin", "GET", "Sunny")
-    add_api_request("admin", "POST", "Rainy")
-    add_api_request("admin", "GET", "Cloudy")
-    print(return_api_request("admin"))
-    
-testing()

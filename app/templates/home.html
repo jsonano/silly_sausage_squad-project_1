@@ -15,13 +15,35 @@
 
   <body>
     <header>
-      <h1>Welcome, {{username}}!</h1>
-      <nav>
-        <ul>
-          <a href="{{ url_for('home') }}">Home</a>
-          <a href="{{ url_for('logout') }}">Logout</a>
-        </ul>
-      </nav>
+        <!-- Allows flashing messages in the html -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        <!-- Displays the welcome container if user is logged in -->
+        {% if session['username'] %}
+            <div class="welcome-container">
+                Welcome, {{ session['username'] }}
+                <a href="{{ url_for('logout') }}" class="signout-btn">Sign Out</a>
+            </div>
+        {% else %}
+            <!-- The existing login container if user is not logged in -->
+            <div class="login-container">
+                <form class="login-form" action="/login" method="POST">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <div class="button-container">
+                        <button type="submit" class="login-btn">Login</button>
+                        <a href="{{ url_for('register') }}" class="signup-btn-link"><button type="button" class="signup-btn">Sign Up</button></a>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
     </header>
 
     <main>
