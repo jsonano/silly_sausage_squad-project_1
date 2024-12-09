@@ -23,17 +23,39 @@
     </nav>
     </header>
     <main>
-      <section>
-        <h2>API Results</h2>
-      </section>
+      <h2>Submit an Image or Search for Results</h2>
+      <form method="POST" action="{{ url_for('process_api') }}" enctype="multipart/form-data">
+        <label for="image_input">Upload an Image:</label>
+        <input type="file" name="image" id="image_input" accept="image/*">
+        <label for="image_url">Or Image URL:</label>
+        <input type="url" name="image_url" id="image_url" placeholder="https://example.com/image.jpg">
+        <label for="search_query">Or Search Keywords:</label>
+        <input type="text" name="search_query" id="search_query" placeholder="e.g., sunset, mountains">
+        <button type="submit">Analyze</button>
+      </form>
+
+      {% if results %}
+      <h2>Analysis Results</h2>
+      <div>
+        <img src="{{ results['image_url'] }}" alt="Analyzed Image" style="max-width: 300px;">
+        <p><strong>Description:</strong> {{ results['description'] }}</p>
+        <h3>Videos:</h3>
+        <ul>
+          {% for video in results['videos'] %}
+          <li><a href="{{ video }}" target="_blank">View Video</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </main>
 
-  </body>
-
+    
   <footer>
     sIlLySaUsAgEsQuAD 2024
   </footer>
 
+
+  </body>
 
 
 

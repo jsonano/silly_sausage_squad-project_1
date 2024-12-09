@@ -9,7 +9,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os
 import sqlite3
-from database import create_db, add_user, return_user
+from database import create_db, add_user, return_user, add_api_request, return_api_request
 from api_handler import get_api_data, run_api_program
 
 
@@ -64,7 +64,17 @@ def register():
 
     return render_template("register.html")
 
-@app.route('/apiresults')
+@app.route('/profile')
+def profile():
+    if "username" not in session:
+        return redirect(url_for("login"))
+    
+    username = session["username"]
+    user_requests = return_api_request(username)
+
+    return render_template("profile.html", username=username, requests=user_requests)
+
+@app.route('/apiresults', methods=["GET", "POST"])
 def apiresults():
     return render_template("apiresults.html")
 
