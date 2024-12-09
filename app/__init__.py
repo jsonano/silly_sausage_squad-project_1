@@ -9,6 +9,9 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os
 import sqlite3
+import urllib.request
+import json
+
 from database import create_db, add_user, return_user, add_api_request, return_api_request
 from api_handler import get_api_data, run_api_program
 
