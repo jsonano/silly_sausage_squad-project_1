@@ -28,7 +28,7 @@ def create_db():
     cur.execute('''
     CREATE TABLE IF NOT EXISTS apis (
         request_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        request DEFAULT NULL,
+        user_request DEFAULT NULL,
         response TEXT, 
         user_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
@@ -87,12 +87,12 @@ def return_user(user):
         conn.close()
         return user_info
     
-def add_api_request(username, request, response):
+def add_api_request(username, user_request, response):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
     user_id = cur.fetchone()[0]
-    cur.execute("INSERT INTO apis (request, response, user_id) VALUES (?, ?, ?)", (request, response, user_id)) 
+    cur.execute("INSERT INTO apis (user_request, response, user_id) VALUES (?, ?, ?)", (user_request, response, user_id)) 
     conn.commit()
     conn.close()
     
