@@ -47,3 +47,8 @@ stanleyH -- 2024-12-8 23:39
  - Added some css
  - Fixed some database functions to allow users to login
  - Added flashing messages
+
+stanleyH -- 2024-12-10 0:39
+ - Added API requests page
+ - Implemented select feature
+ - Got the API request route working in Python

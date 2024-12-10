@@ -68,15 +68,64 @@ def profile():
 
     return render_template("profile.html", username=username, requests=user_requests)
 
-@app.route('/apiresults', methods=["GET", "POST"])
-def apiresults():
-    return render_template("apiresults.html")
+@app.route('/api_requests', methods=["GET", "POST"])
+def api_requests():
+    if request.method == 'POST':
+        return get_api_data()
+    return render_template("api_requests.html")
 
-@app.route('/logout')
+@app.route('/logout', methods=["POST"])
 def logout():
     if "username" in session:
         session.pop("username")
     return redirect(url_for("login"))
 
+@app.route('/get_api_data', methods=["GET", "POST"])
+def get_api_data():
+    if False:
+        return 1
+#     if "username" not in session:
+#         flash('Login to use API requests!', 'error')
+#         return redirect(url_for("api_requests"))
+    else:
+        # Gets the input
+        input_option = request.form.get('input_option')
+        image_file = request.files.get('image_file')
+        image_url = request.form.get('image_url')
+        selected_url = request.form.get('selected_image')
+        search_query = request.form.get('search_query')
+        print(selected_url)
+        # Different calls for each input
+        if input_option == 'random':
+            url, description, videos = run_api_program()
+            return render_template("api_results.html", url=url, description=description, videos=videos)
+        elif input_option == 'upload':
+            if image_file:
+                url, description, videos = run_api_program(image_file=image_file)
+                return render_template("api_results.html", url=url, description=description, videos=videos)
+            else:
+                flash('Upload an image!', 'error')
+                return render_template("api_requests.html")
+        elif input_option == 'url':
+            if image_url:
+                url, description, videos = run_api_program(user_image_url=image_url)
+                return render_template("api_results.html", url=url, description=description, videos=videos)
+            else:
+                flash('Enter an url!', 'error')
+                return render_template("api_requests.html")
+        elif selected_url:
+                url, description, videos = run_api_program(user_image_url=selected_url)
+                return render_template("api_results.html", url=url, description=description, videos=videos)
+        else:
+            if search_query:
+                img_urls = run_api_program(search_request=search_query)
+#                 print(img_urls)
+                return render_template("api_requests.html", img_urls=img_urls)
+            else:
+                flash('Enter a description!', 'error')
+                return render_template("api_requests.html")
+            
+
 if __name__ == "__main__":
     app.run(debug=True)
+    
