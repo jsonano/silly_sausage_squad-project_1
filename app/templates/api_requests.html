@@ -17,7 +17,7 @@
           {% endif %}
         {% endwith %}
       {% if session['username'] %}
-        
+
       <!-- Show a welcome message and sign-out option if the user is logged in -->
       <div class="welcome-container">
         Welcome, {{ session['username'] }}
@@ -39,20 +39,26 @@
       </div>
       {% endif %}
     </header>
-      
+
     <main>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('api_requests') }}">Api Requests</a>
+      </nav>
+      
       <h2>Submit an Image or Search for Results</h2>
 
       <!-- Form to submit the user's choice -->
       <form method="POST" action="{{ url_for('get_api_data') }}" enctype="multipart/form-data">
-          
+
         <!-- Option 1: Random Image -->
         <div class="radio-group">
           <!-- Radio button to select this option -->
           <input type="radio" id="random_option" name="input_option" value="random" checked>
           <label for="random_option">Random Image</label>
         </div>
-          
+
         <!-- Option 2: Upload an Image -->
         <div class="radio-group">
           <!-- Radio button to select this option -->
@@ -89,7 +95,7 @@
         <!-- Submit button -->
         <button type="submit">Analyze</button>
       </form>
-        
+
       <!-- Pop up to display the top 5 result iimages for user to choose from if they enter a description -->
       {% if img_urls %}
         <div class="overlay active"></div>

@@ -46,7 +46,15 @@
         {% endif %}
     </header>
 
+
     <main>
+
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('api_requests') }}">Api Requests</a>
+      </nav>
+
       <section>
         <h2>Overview</h2>
         <p>Welcome to sIlLySaUsAgEsQuAD's app</p>

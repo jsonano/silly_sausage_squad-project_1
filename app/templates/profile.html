@@ -48,6 +48,11 @@
 <!-- below will be the somewhat starter code for the history of images until db is finished -->
 <!-- add an html function that takes a link and turns it into an image -->
     <main>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('api_requests') }}">Api Requests</a>
+      </nav>
       <h1>{{ username }}'s Profile</h1>
       <section class="past-image-list">
         {% if requests %}
