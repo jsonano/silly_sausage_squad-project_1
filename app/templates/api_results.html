@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API RESULTS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <header>
+      <!-- Allows flashing messages in the html -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+      {% if session['username'] %}
+
+      <!-- Show a welcome message and sign-out option if the user is logged in -->
+      <div class="welcome-container">
+        Welcome, {{ session['username'] }}
+        <a href="{{ url_for('logout') }}" class="signout-btn">Sign Out</a>
+      </div>
+      {% else %}
+      <!-- Display the login form if the user is not logged in -->
+      <div class="login-container">
+        <form class="login-form" action="/login" method="POST">
+          <input type="text" name="username" placeholder="Username" required>
+          <input type="password" name="password" placeholder="Password" required>
+          <div class="button-container">
+            <button type="submit" class="login-btn">Login</button>
+            <a href="{{ url_for('register') }}" class="signup-btn-link">
+              <button type="button" class="signup-btn">Sign Up</button>
+            </a>
+          </div>
+        </form>
+      </div>
+      {% endif %}
+    </header>
+    <main>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('api_requests') }}">Api Requests</a>
+      </nav>
+    <!-- one link to display image -->
+    <!-- one description for the image (just a sentence describing the image)-->
+    <!-- five videos to choose from -->
+    
+
+    </main>
+
+  <footer>
+    <!-- Footer text -->
+    sIlLySaUsAgEsQuAD 2024
+  </footer>
+</body>
+</html>
