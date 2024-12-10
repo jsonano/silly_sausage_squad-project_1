@@ -20,15 +20,15 @@ def load_api_keys():
 
 api_keys = load_api_keys()
 
-def get_api_data(api, params=None, image_url=None, search=None): # api --> api we want, params for unplash image, image_url for clarifai image analysis, search for pixabay videos
+def get_api_data(api, params=None, image_url=None, search=None, file_bytes=None): # api --> api we want, params for unplash image, image_url for clarifai image analysis, search for pixabay videos
     # Sets the urls
-    urls = {'unsplash': f'https://api.unsplash.com/photos/random?client_id={api_keys["unsplash"]}', 
+    urls = {'unsplash': f'https://api.unsplash.com/photos/random?client_id={api_keys["unsplash"]}',
         'clarifai': f'https://clarifai.com/salesforce/blip/models/general-english-image-caption-blip',
         'pixabay': f'https://pixabay.com/api/videos/?key={api_keys["pixabay"]}&q={search}'}
     # Clarifai url is unneccesary since we don't actually use it but whatever
     url = urls[api]
     # Different processes for each api
-    
+
     # Unsplash (get img)
     if api == 'unsplash':
         if params==None:
@@ -46,11 +46,11 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
             # Send request
             response = requests.get(url, headers=headers, params=params)
             data = response.json()
-            
+
             for result in data['results']:
                 img_links.append(result['urls']['regular'])
-            return img_links  
-        
+            return img_links
+
     # Clarifai (img to txt)
     elif api == 'clarifai':
         # Model code from clarifai api documentation
@@ -66,7 +66,7 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
         IMAGE_URL = image_url
         # To use a local file, assign the location variable
         # IMAGE_FILE_LOCATION = "YOUR_IMAGE_FILE_LOCATION_HERE"
-        
+
         channel = ClarifaiChannel.get_grpc_channel()
         stub = service_pb2_grpc.V2Stub(channel)
 
@@ -104,10 +104,10 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
 
         # Since we have one input, one output will exist here
         output = post_model_outputs_response.outputs[0]
-        
+
         # Get the output
         return output.data.text.raw[len('a photograph of a '):]
-    
+
     # Pixabay (videos)
     else:
         video_links = []
@@ -120,7 +120,7 @@ def get_api_data(api, params=None, image_url=None, search=None): # api --> api w
             return video_links
         else:
             return video_links[:5]
-        
+
 def run_api_program(user_image_url=None, image_file=None, search_request=None):
     if user_image_url != None:
         image_url = user_image_url

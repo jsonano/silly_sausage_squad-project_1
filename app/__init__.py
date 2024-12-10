@@ -61,8 +61,9 @@ def register():
 @app.route('/profile')
 def profile():
     if "username" not in session:
+        flash("Login to view your profile!", 'error')
         return redirect(url_for("login"))
-    
+
     username = session["username"]
     user_requests = return_api_request(username)
 
@@ -94,13 +95,14 @@ def get_api_data():
         image_url = request.form.get('image_url')
         selected_url = request.form.get('selected_image')
         search_query = request.form.get('search_query')
-        print(selected_url)
         # Different calls for each input
         if input_option == 'random':
             url, description, videos = run_api_program()
             return render_template("api_results.html", url=url, description=description, videos=videos)
         elif input_option == 'upload':
             if image_file:
+                print(image_file)
+                file_content = image_file.read() 
                 url, description, videos = run_api_program(image_file=image_file)
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
@@ -124,8 +126,7 @@ def get_api_data():
             else:
                 flash('Enter a description!', 'error')
                 return render_template("api_requests.html")
-            
+
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
