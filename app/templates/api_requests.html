@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API RESULTS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+      /* Initially hide all input sections */
+      .input-section {
+        display: none;
+      }
+
+      /* Display the input section corresponding to the selected radio button */
+      input[type="radio"]:checked + label + .input-section {
+        display: block;
+      }
+
+      /* Add some spacing between radio groups */
+      .radio-group {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <!-- Allows flashing messages in the html -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+      {% if session['username'] %}
+      <!-- Show a welcome message and sign-out option if the user is logged in -->
+      <div class="welcome-container">
+        Welcome, {{ session['username'] }}
+        <a href="{{ url_for('logout') }}" class="signout-btn">Sign Out</a>
+      </div>
+      {% else %}
+      <!-- Display the login form if the user is not logged in -->
+      <div class="login-container">
+        <form class="login-form" action="/login" method="POST">
+          <input type="text" name="username" placeholder="Username" required>
+          <input type="password" name="password" placeholder="Password" required>
+          <div class="button-container">
+            <button type="submit" class="login-btn">Login</button>
+            <a href="{{ url_for('register') }}" class="signup-btn-link">
+              <button type="button" class="signup-btn">Sign Up</button>
+            </a>
+          </div>
+        </form>
+      </div>
+      {% endif %}
+    </header>
+    <main>
+      <h2>Submit an Image or Search for Results</h2>
+
+      <!-- Form to submit the user's choice -->
+      <form method="POST" action="{{ url_for('get_api_data') }}" enctype="multipart/form-data">
+          
+        <!-- Option 1: Random Image -->
+        <div class="radio-group">
+          <!-- Radio button to select this option -->
+          <input type="radio" id="random_option" name="input_option" value="random" checked>
+          <label for="random_option">Random Image</label>
+        </div>
+          
+        <!-- Option 2: Upload an Image -->
+        <div class="radio-group">
+          <!-- Radio button to select this option -->
+          <input type="radio" id="upload_option" name="input_option" value="upload">
+          <label for="upload_option">Upload an Image</label>
+          <!-- Input field for file upload -->
+          <div class="input-section">
+            <input type="file" name="image_file" id="image_file" accept="image/*">
+          </div>
+        </div>
+
+        <!-- Option 3: Provide an Image URL -->
+        <div class="radio-group">
+          <!-- Radio button to select this option -->
+          <input type="radio" id="url_option" name="input_option" value="url">
+          <label for="url_option">Provide an Image URL</label>
+          <!-- Input field for image URL -->
+          <div class="input-section">
+            <input type="url" name="image_url" id="image_url" placeholder="https://example.com/image.jpg">
+          </div>
+        </div>
+
+        <!-- Option 4: Enter Keywords -->
+        <div class="radio-group">
+          <!-- Radio button to select this option -->
+          <input type="radio" id="keyword_option" name="input_option" value="keywords">
+          <label for="keyword_option">Enter Keywords</label>
+          <!-- Input field for entering search keywords -->
+          <div class="input-section">
+            <input type="text" name="search_query" id="search_query" placeholder="e.g., sunset, mountains">
+          </div>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit">Analyze</button>
+      </form>
+        
+      {% if img_urls %}
+        <div class="overlay active"></div>
+        <div class="modal active">
+            <h2>Select an Image</h2>
+            <form method="POST" action="/get_api_data">
+                <div class="image-container">
+                    <!-- Display the selected image larger on the right -->
+                    <div class="large-image">
+                        <!-- Single image preview -->
+                        <img id="preview-image" src="{{ img_urls[0] }}" alt="Preview Image">
+                    </div>
+
+                    <!-- List of images to select -->
+                    <div class="thumbnail-container">
+                        {% for url in img_urls %}
+                        <div class="thumbnail">
+                            <input
+                                type="radio"
+                                name="selected_image"
+                                id="img{{ loop.index }}"
+                                value="{{ url }}"
+                                {% if loop.index == 1 %}checked{% endif %}
+                                onchange="document.getElementById('preview-image').src=this.value;"
+                                required
+                            >
+                            <label for="img{{ loop.index }}">
+                                <img src="{{ url }}" alt="Image {{ loop.index }}">
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit">Analyze Selected Image</button>
+                    <a href="{{ url_for('api_requests') }}" class="cancel-button">Cancel</a>
+                </div>
+            </form>
+        </div>
+      {% endif %}
+    </main>
+    <footer>
+      <!-- Footer text -->
+      sIlLySaUsAgEsQuAD 2024
+    </footer>
+  </body>
+</html>
