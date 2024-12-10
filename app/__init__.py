@@ -6,15 +6,15 @@
 # Time spent: 12
 
 # Imports
-from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os
 import sqlite3
 import urllib.request
 import json
 
+from flask import Flask, request, render_template, redirect, url_for, flash, session
+
 from database import create_db, add_user, login_user, return_user, add_api_request, return_api_request
 from api_handler import get_api_data, run_api_program
-
 
 db_filename = "apis.db"
 
