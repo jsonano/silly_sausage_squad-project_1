@@ -31,7 +31,7 @@ def create_db():
         user_request TEXT,
         response TEXT, 
         user_id INTEGER,
-        img_file BLOB DEFAULT NULL
+        img_file BLOB DEFAULT NULL,
         FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
     );
     ''')

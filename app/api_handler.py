@@ -143,6 +143,7 @@ def run_api_program(user_image_url=None, image_file=None, search_request=None):
     elif image_file != None:
         file_bytes = image_file.read()
         description = get_api_data('clarifai', file_bytes=file_bytes)
+#         image_url
     elif search_request != None:
         # Search parameters
         params = {
