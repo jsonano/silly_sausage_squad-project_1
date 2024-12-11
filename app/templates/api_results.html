@@ -66,12 +66,10 @@
         <div class="embedded-videos">
           {% for video in videos %}
           <div class="video-container">
-            <iframe
-            src="{{ video }}" 
-              frameborder="0" 
-              allowfullscreen 
-              class="video-frame">
-            </iframe>
+            <video controls width="320" height="240">
+              <source src="{{ video }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
           {% endfor %}
         </div>
