@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 import os, urllib.request, json
 import requests
+import base64
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
@@ -19,6 +20,14 @@ def load_api_keys():
     return keys
 
 api_keys = load_api_keys()
+
+# Converts the bytes to a link
+def convert_bytes_to_image_url(file_bytes):
+    # Encode the bytes into Base64
+    base64_image = base64.b64encode(file_bytes).decode("utf-8")
+    # Create a data URL for the image
+    image_url = f"data:image/jpeg;base64,{base64_image}"
+    return image_url
 
 def get_api_data(api, params=None, image_url=None, search=None, file_bytes=None): # api --> api we want, params for unplash image, image_url for clarifai image analysis, search for pixabay videos
     # Sets the urls
@@ -143,7 +152,7 @@ def run_api_program(user_image_url=None, image_file=None, search_request=None):
     elif image_file != None:
         file_bytes = image_file.read()
         description = get_api_data('clarifai', file_bytes=file_bytes)
-#         image_url
+        image_url = convert_bytes_to_image_url(file_bytes)
     elif search_request != None:
         # Search parameters
         params = {
