@@ -48,7 +48,39 @@
     <!-- one link to display image -->
     <!-- one description for the image (just a sentence describing the image)-->
     <!-- five videos to choose from -->
-    
+
+      <h1>API Results</h1>
+
+      <section class="image-section">
+        <h2>Selected Image</h2>
+        <img src="{{ url }}" alt="Result Image" class="result-image">
+      </section>
+
+      <section class="description-section">
+        <h2>Description</h2>
+        <p>{{ description }}</p>
+      </section>
+
+      <section class="video-section">
+        <h2>Videos</h2>
+        <div class="embedded-videos">
+          {% for video in videos %}
+          <div class="video-container">
+            <iframe
+            src="{{ video }}" 
+              frameborder="0" 
+              allowfullscreen 
+              class="video-frame">
+            </iframe>
+          </div>
+          {% endfor %}
+        </div>
+          
+      </section>
+
+      <section class="back-section">
+        <a href="{{ url_for('api_requests') }}" class="back-btn">Back to API Requests</a>
+      </section>
 
     </main>
 
