@@ -28,9 +28,10 @@ def create_db():
     cur.execute('''
     CREATE TABLE IF NOT EXISTS apis (
         request_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_request DEFAULT NULL,
+        user_request TEXT,
         response TEXT, 
         user_id INTEGER,
+        img_file BLOB DEFAULT NULL
         FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
     );
     ''')
@@ -89,12 +90,15 @@ def return_user(user):
         conn.close()
         return user_info
     
-def add_api_request(username, user_request, response):
+def add_api_request(username, user_request, response, img_file_bytes=None):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
     user_id = cur.fetchone()[0]
-    cur.execute("INSERT INTO apis (user_request, response, user_id) VALUES (?, ?, ?)", (user_request, response, user_id)) 
+    if img_file==None:
+        cur.execute("INSERT INTO apis (user_request, response, user_id) VALUES (?, ?, ?)", (user_request, response, user_id)) 
+    else:
+        cur.execute("INSERT INTO apis (user_request, response, user_id, img_file) VALUES (?, ?, ?, ?)", (user_request, response, user_id, img_file_bytes)) 
     conn.commit()
     conn.close()
     
@@ -114,3 +118,5 @@ def return_api_request(username): # returns all api requests under the same user
         print("API request does not exist.")
     finally:
         conn.close()
+
+        

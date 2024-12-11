@@ -64,37 +64,52 @@ def get_api_data(api, params=None, image_url=None, search=None, file_bytes=None)
         MODEL_ID = "general-english-image-caption-blip"
         MODEL_VERSION_ID = "cdb690f13e62470ea6723642044f95e4"
         IMAGE_URL = image_url
-        # To use a local file, assign the location variable
-        # IMAGE_FILE_LOCATION = "YOUR_IMAGE_FILE_LOCATION_HERE"
 
         channel = ClarifaiChannel.get_grpc_channel()
         stub = service_pb2_grpc.V2Stub(channel)
 
         metadata = (("authorization", "Key " + PAT),)
-        # To use a local file, uncomment the following lines
-        # with open(IMAGE_FILE_LOCATION, "rb") as f:
-        #     file_bytes = f.read()
-
+        
         userDataObject = resources_pb2.UserAppIDSet(user_id=USER_ID, app_id=APP_ID)
 
-        post_model_outputs_response = stub.PostModelOutputs(
-            service_pb2.PostModelOutputsRequest(
-                user_app_id=userDataObject,  # The userDataObject is created in the overview and is required when using a PAT
-                model_id=MODEL_ID,
-                version_id=MODEL_VERSION_ID,  # This is optional. Defaults to the latest model version
-                inputs=[
-                    resources_pb2.Input(
-                        data=resources_pb2.Data(
-                            image=resources_pb2.Image(
-                                url=IMAGE_URL
-                                # base64=file_bytes
+        if file_bytes == None:
+            post_model_outputs_response = stub.PostModelOutputs(
+                service_pb2.PostModelOutputsRequest(
+                    user_app_id=userDataObject,  # The userDataObject is created in the overview and is required when using a PAT
+                    model_id=MODEL_ID,
+                    version_id=MODEL_VERSION_ID,  # This is optional. Defaults to the latest model version
+                    inputs=[
+                        resources_pb2.Input(
+                            data=resources_pb2.Data(
+                                image=resources_pb2.Image(
+                                    url=IMAGE_URL
+                                    # base64=file_bytes
+                                    )
                                 )
-                            )
-                    )
-                ],
-            ),
-            metadata=metadata,
-        )
+                        )
+                    ],
+                ),
+                metadata=metadata,
+            )
+        else:
+            post_model_outputs_response = stub.PostModelOutputs(
+                service_pb2.PostModelOutputsRequest(
+                    user_app_id=userDataObject,  # The userDataObject is created in the overview and is required when using a PAT
+                    model_id=MODEL_ID,
+                    version_id=MODEL_VERSION_ID,  # This is optional. Defaults to the latest model version
+                    inputs=[
+                        resources_pb2.Input(
+                            data=resources_pb2.Data(
+                                image=resources_pb2.Image(
+                                    # url=IMAGE_URL
+                                    base64=file_bytes
+                                    )
+                                )
+                        )
+                    ],
+                ),
+                metadata=metadata,
+            )
         if post_model_outputs_response.status.code != status_code_pb2.SUCCESS:
             print(post_model_outputs_response.status)
             raise Exception(
@@ -124,8 +139,10 @@ def get_api_data(api, params=None, image_url=None, search=None, file_bytes=None)
 def run_api_program(user_image_url=None, image_file=None, search_request=None):
     if user_image_url != None:
         image_url = user_image_url
+        description = get_api_data('clarifai', image_url=image_url)
     elif image_file != None:
-        return
+        file_bytes = image_file.read()
+        description = get_api_data('clarifai', file_bytes=file_bytes)
     elif search_request != None:
         # Search parameters
         params = {
@@ -136,7 +153,7 @@ def run_api_program(user_image_url=None, image_file=None, search_request=None):
         return get_api_data('unsplash', params=params)
     else:
         image_url = get_api_data('unsplash')
-    description = get_api_data('clarifai', image_url=image_url)
+        description = get_api_data('clarifai', image_url=image_url)
     search_description = description.replace(' ', '+')
     videos = get_api_data('pixabay', search=search_description)
     # Returns url of the image, text caption of the image, and a list of 5 video urls that use the description as the search keywords

@@ -102,7 +102,6 @@ def get_api_data():
         elif input_option == 'upload':
             if image_file:
                 print(image_file)
-                file_content = image_file.read() 
                 url, description, videos = run_api_program(image_file=image_file)
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
