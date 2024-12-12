@@ -57,5 +57,13 @@ stanleyH -- 2024-12-10 22:31
  - Trying to add image upload feature
  - Fixing API request bugs
 
+alexL -- 2024-12-10 1:30
+ - added API results page
+ - added new nav bar to templates
+
 stanleyH -- 2024-12-11 18:46
  - Users can now upload files
+
+alexL -- 2024-12-12 12:12
+ - updated profile.html
+ - fixed image scaling 
