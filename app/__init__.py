@@ -83,11 +83,11 @@ def logout():
 
 @app.route('/get_api_data', methods=["GET", "POST"])
 def get_api_data():
-    if False:
-        return 1
-#     if "username" not in session:
-#         flash('Login to use API requests!', 'error')
-#         return redirect(url_for("api_requests"))
+    # if False:
+    #     return 1
+    if "username" not in session:
+        flash('Login to use API requests!', 'error')
+        return redirect(url_for("api_requests"))
     else:
         # Gets the input
         input_option = request.form.get('input_option')
