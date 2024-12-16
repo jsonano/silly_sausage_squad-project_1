@@ -83,29 +83,26 @@
     <main>
       <h1>{{ username }}'s Profile</h1>
       <section class="past-image-list">
-        {% if requests %}
-          <h2>Past Requests</h2>
-          <div class = "requests-container">
+      {% if requests %}
+        <h2>Past Requests</h2>
+        <div class = "requests-container">
           {% for request in requests %}
             <div class="request-box">
               <h3>Request {{ loop.index }}</h3>
               <p><strong>Request:</strong> {{ request['user_request'] }}</p>
               <p><strong>Response:</strong> {{ request['response'] }}</p>
-
               {% if request['img_file'] %}
                 <div class="image-container">
                   <img src="data:image/png;base64,{{ request['img_file'] | b64encode }}" alt="image result">
                 </div>
               {% endif %}
-            
-                <a href="{{ url_for('api_results', request_id=request['request_id']) }}" class="view-details-btn">View Details</a>
+              <a href="{{ url_for('api_results', request_id=request['request_id']) }}" class="view-details-btn">View Details</a>
             </div>
-    
           {% endfor %}
         </div>
-        {% else %}
+       {% else %}
           <p>No past requests found.</p>
-        {% endif %}
+       {% endif %}
       </section>
     </main>
   </body>
