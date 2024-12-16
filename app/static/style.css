@@ -38,18 +38,27 @@ color: #155724;
 @keyframes fadeOut {
   0% {
       opacity: 1; /* Fully visible */
+      margin-top: 0; /* Keep the message in place */
   }
   80% {
       opacity: 1; /* Remain visible until near the end */
+      margin-top: 0; /* Keep the message in place */
   }
   100% {
       opacity: 0; /* Fully transparent */
+      margin-top: -7%; /* Move the message up so it doesn't block UI*/
   }
 }
 
 
 .header {
   text-align: left;
+}
+
+#current-link {
+    font-weight: bold;
+    color: #d3d3d3;
+    border-bottom:rgb(143, 167, 192) 3px solid;
 }
 
 /* Container for the form elements */
@@ -112,10 +121,11 @@ background-color: #45a049;
 /* Welcome Container */
 .welcome-container {
     position: fixed;
+    width: fit-content;
     top: 0;
     right: 0;
     background-color: #f8f9fa;
-    padding: 10px;
+    padding: 12px;
     border-bottom-left-radius: 8px;
 }
 
@@ -148,7 +158,7 @@ margin-bottom: 20px;
 }
 
 /* Modal styles */
-.modal {
+.non-bs-modal {
     display: block;
     position: fixed;
     top: 50%;

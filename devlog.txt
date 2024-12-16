@@ -67,3 +67,6 @@ stanleyH -- 2024-12-11 18:46
 alexL -- 2024-12-12 12:12
  - updated profile.html
  - fixed image scaling 
+
+jasonC -- 2024-12-15 11:42
+ - added BS and CSS styling for nav bar for all sites
