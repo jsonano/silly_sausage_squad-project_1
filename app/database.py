@@ -29,7 +29,8 @@ def create_db():
     CREATE TABLE IF NOT EXISTS apis (
         request_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_request TEXT,
-        response TEXT, 
+        request_type TEXT,
+        response TEXT,
         user_id INTEGER,
         img_file BLOB DEFAULT NULL,
         FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
@@ -57,7 +58,7 @@ def add_user(user, password):
         #     flash('Username already exists!', 'error')
         finally:
             conn.close()
-            
+
 # Logs in user if username and password match
 def login_user():
     if request.method == 'POST':
@@ -89,19 +90,19 @@ def return_user(user):
     finally:
         conn.close()
         return user_info
-    
-def add_api_request(username, user_request, response, img_file_bytes=None):
+
+def add_api_request(username, user_request, request_type, response, img_file_bytes=None):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
     user_id = cur.fetchone()[0]
-    if img_file==None:
-        cur.execute("INSERT INTO apis (user_request, response, user_id) VALUES (?, ?, ?)", (user_request, response, user_id)) 
+    if img_file_bytes == None:
+        cur.execute("INSERT INTO apis (user_request, request_type, response, user_id) VALUES (?, ?, ?)", (user_request, request_type, response, user_id))
     else:
-        cur.execute("INSERT INTO apis (user_request, response, user_id, img_file) VALUES (?, ?, ?, ?)", (user_request, response, user_id, img_file_bytes)) 
+        cur.execute("INSERT INTO apis (user_request, request_type, response, user_id, img_file) VALUES (?, ?, ?, ?)", (user_request, request_type, response, user_id, img_file_bytes))
     conn.commit()
     conn.close()
-    
+
 def return_api_request(username): # returns all api requests under the same user
     conn = get_db_connection()
     cur = conn.cursor()
@@ -114,13 +115,13 @@ def return_api_request(username): # returns all api requests under the same user
         #user_id = user["user_id"]
         cur.execute("SELECT * FROM apis WHERE user_id = ?", (user_id,))
         #requests = cur.fetchall()
-        #return requests 
+        #return requests
     #except Exception as e:
         #print("Error Fetching API Requests:", e)
         #return []
     #finally:
-         #conn.close() 
-    
+         #conn.close()
+
         conn.commit()
         return cur.fetchall()
         # for row in cur.fetchall():
@@ -130,5 +131,3 @@ def return_api_request(username): # returns all api requests under the same user
         print("API request does not exist.")
     finally:
         conn.close()
-
-        

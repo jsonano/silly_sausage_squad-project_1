@@ -89,6 +89,7 @@ def get_api_data():
         flash('Login to use API requests!', 'error')
         return redirect(url_for("api_requests"))
     else:
+        username = session['username']
         # Gets the input
         input_option = request.form.get('input_option')
         image_file = request.files.get('image_file')
@@ -98,11 +99,23 @@ def get_api_data():
         # Different calls for each input
         if input_option == 'random':
             url, description, videos = run_api_program()
+            api_dict = {
+                'unsplash' : url,
+                'clarifai' : description,
+                'pixabay' : videos
+            }
+            add_api_request(username, input_option, "Random Image", api_dict)
             return render_template("api_results.html", url=url, description=description, videos=videos)
         elif input_option == 'upload':
             if image_file:
                 print(image_file)
                 url, description, videos = run_api_program(image_file=image_file)
+                api_dict = {
+                    'unsplash' : url,
+                    'clarifai' : description,
+                    'pixabay' : videos
+                }
+                add_api_request(username, input_option, "Uploaded Image", api_dict)
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
                 flash('Upload an image!', 'error')
@@ -110,12 +123,24 @@ def get_api_data():
         elif input_option == 'url':
             if image_url:
                 url, description, videos = run_api_program(user_image_url=image_url)
+                api_dict = {
+                    'unsplash' : url,
+                    'clarifai' : description,
+                    'pixabay' : videos
+                }
+                add_api_request(username, input_option, "Image Link", api_dict)
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
                 flash('Enter an url!', 'error')
                 return render_template("api_requests.html")
         elif selected_url:
                 url, description, videos = run_api_program(user_image_url=selected_url)
+                api_dict = {
+                    'unsplash' : url,
+                    'clarifai' : description,
+                    'pixabay' : videos
+                }
+                add_api_request(username, input_option, "Selected Image", api_dict)
                 return render_template("api_results.html", url=url, description=description, videos=videos)
         else:
             if search_query:
