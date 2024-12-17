@@ -217,8 +217,12 @@ margin-bottom: 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     width: 80%;
     max-width: 800px;
-    overflow: hidden;
+    height: 70vh;
+    max-height: 70vh; 
+    overflow-y: auto; 
+    border-radius: 8px; 
 }
+
 
 .overlay {
     display: block;
@@ -243,20 +247,20 @@ margin-bottom: 20px;
 }
 
 .thumbnail-container {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
-    max-height: 300px;
+    height: 300px;
 }
 
 .thumbnail img {
     cursor: pointer;
-    width: 100px;
+    width: 200px;
     height: auto;
     transition: transform 0.2s ease;
 }
+
 
 .thumbnail img:hover {
     transform: scale(1.1);
@@ -265,7 +269,11 @@ margin-bottom: 20px;
 .button-container {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 40px; 
+}
+
+.analyze-button {
+    margin-top: 20vh; 
 }
 
 .cancel-button {
@@ -276,6 +284,7 @@ margin-bottom: 20px;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
+    margin-top: 20vh;
 }
 
 .cancel-button:hover {
@@ -356,7 +365,7 @@ form .form-control {
     margin-top: 2%; 
     margin-bottom: 2%; 
     width: 55%;
-    height: 39vh;
+    height: 90vh;
     transition: transform 0.2s;
     align-items: center;
 }

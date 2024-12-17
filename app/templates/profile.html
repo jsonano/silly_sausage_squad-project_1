@@ -98,10 +98,11 @@
                     {% endif %}
                         <img src="{{ request[1] }}" alt="image result">
                     </div>
-                    <p id="image-description"> {{ request[2] }} </p>
+                    <br>
+                    <p id="image-description">{{ request[2] }} </p>
                     <div style="margin-right: -10%; ">
                     {% for video in request[3] %}
-                        {% if loop.index0 < 4 %}
+                        {% if loop.index0 < 5 %}
                             <video controls width="200" height="150">
                                 <source src="{{ video }}" type="video/mp4">
                                 Your browser does not support the video tag.

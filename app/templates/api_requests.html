@@ -47,6 +47,7 @@
                       <button type="button" class="btn btn-primary m-3 float-end" data-bs-toggle="collapse" data-bs-target="#login">Login</button>
                   </div>
                   {% endif %}
+              </div>
           </div>
       </nav>
 
@@ -157,7 +158,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button type="submit">Analyze Selected Image</button>
+                    <button type="submit" class="analyze-button">Analyze Selected Image</button>
                     <a href="{{ url_for('api_requests') }}" class="cancel-button">Cancel</a>
                 </div>
             </form>
