@@ -67,7 +67,6 @@ def profile():
 
     username = session["username"]
     user_requests = return_api_request(username)
-    print(user_requests)
 
     return render_template("profile.html", username=username, requests=user_requests)
 
