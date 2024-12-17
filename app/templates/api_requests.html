@@ -71,12 +71,12 @@
       {% endif %}
   </header>
 
-    <main>
+    <main class="page-container">
 
-      <h2>Submit an Image or Search for Results</h2>
+      <h1 class="section-title">Submit an Image or Search for Results</h1>
 
       <!-- Form to submit the user's choice -->
-      <form method="POST" action="{{ url_for('get_api_data') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ url_for('get_api_data') }}" enctype="multipart/form-data" class="box">
 
         <!-- Option 1: Random Image -->
         <div class="radio-group">
@@ -119,7 +119,7 @@
         </div>
 
         <!-- Submit button -->
-        <button type="submit">Analyze</button>
+        <button type="submit" class="btn btn-success">Analyze</button>
       </form>
 
       <!-- Pop up to display the top 5 result iimages for user to choose from if they enter a description -->
@@ -164,9 +164,8 @@
         </div>
       {% endif %}
     </main>
-    <footer>
-      <!-- Footer text -->
-      sIlLySaUsAgEsQuAD 2024
+    <footer class="bg-dark text-light text-center py-2 fixed-bottom">
+      <p class="m-0">sIlLySaUsAgEsQuAD 2024</p>
     </footer>
   </body>
 </html>

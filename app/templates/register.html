@@ -28,30 +28,40 @@
           {% endif %}
         {% endwith %}
       </header>
-    <div class="bg-dark text-light mx-auto p-2">
-      <center><h1>Register</h1></center>
-    </div>
-    <br><br><br>
-    <div class="mx-auto p-3 shadow-lg bg-dark text-light rounded-3" style="width: 300px;">
-    <form method="POST">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
-      <br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-      <br><br>
-      <button type="submit">Register</button>
+  
+  <main class="page-container">
+    <div class="box text-center">
+      <h1 class="section-title mb-4">Register</h1>
+
+    <form method="POST" class="text-start">
+      <div class="mb-3">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      {% if error_message %}
+      <div class="alert alert-danger mt-2">
+        {{ error_message }}
+      </div>
+      {% endif %}
+      <button type="submit" class="btn btn-success w-100 mt-3">Register</button>
     </form>
-    {% if error_message %}
-      <p style="color: red;">{{ error_message }}</p>
-    {% endif %}
-    <a href="{{ url_for('home') }}">Home</a>
+    <div class="mt-3">
+      <a href="{{ url_for('home') }}" class="back-btn">Back to Home</a>
+    </div>
   </div>
+  </main>
+
+  <footer class="bg-dark text-light text-center py-2 fixed-bottom">
+    <p class="m-0">sIlLySaUsAgEsQuAD 2024</p>
+  </footer>
   </body>
 
-  <footer>
-    sIlLySaUsAgEsQuAD 2024
-  </footer>
 
 
 

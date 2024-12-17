@@ -80,12 +80,12 @@
     </header>
 <!-- below will be the somewhat starter code for the history of images until db is finished -->
 <!-- add an html function that takes a link and turns it into an image -->
-    <main>
-      <h1>{{ username }}'s Profile</h1>
-      <section class="past-image-list">
+    <main class="page-container">
+      <h1 class="section-title">{{ username }}'s Profile</h1>
+      <section class="box">
       {% if requests %}
         <h2>Past Requests</h2>
-        <div class = "requests-container">
+        <div class = "box">
           {% for request in requests %}
             <div class="request-box">
               <h3>Request {{ loop.index }}</h3>
@@ -105,12 +105,12 @@
        {% endif %}
       </section>
     </main>
-  </body>
+  
 
-  <footer>
-    sIlLySaUsAgEsQuAD 2024
+  <footer class="bg-dark text-light text-center py-2 fixed-bottom">
+    <p class="m-0">sIlLySaUsAgEsQuAD 2024</p>
   </footer>
-
+</body>
 
 
 

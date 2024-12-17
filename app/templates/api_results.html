@@ -74,23 +74,24 @@
       {% endif %}
   </header>
 
-    <main>
+    <main class="page-container">
+      <h1 class="section-title">API Results</h1>
 
     <!-- one link to display image -->
     <!-- one description for the image (just a sentence describing the image)-->
     <!-- five videos to choose from -->
 
-      <section class="image-section">
+      <section class="box image-section">
         <h2>Selected Image</h2>
         <img src="{{ url }}" alt="Result Image" class="result-image" width="320" height="240">
       </section>
 
-      <section class="description-section">
+      <section class="box description-section">
         <h2>Description</h2>
         <p>{{ description }}</p>
       </section>
 
-      <section class="video-section">
+      <section class="box video-section">
         <h2>Videos</h2>
         <div class="embedded-videos">
           {% for video in videos %}
@@ -111,9 +112,8 @@
 
     </main>
 
-  <footer>
-    <!-- Footer text -->
-    sIlLySaUsAgEsQuAD 2024
-  </footer>
+    <footer class="bg-dark text-light text-center py-2 fixed-bottom">
+      <p class="m-0">sIlLySaUsAgEsQuAD 2024</p>
+    </footer>
 </body>
 </html>
