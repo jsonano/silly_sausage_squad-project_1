@@ -110,18 +110,8 @@ def return_api_request(username): # returns all api requests under the same user
     try:
         cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
         user_id = cur.fetchone()[0]
-        #user = cur.fetchone()
-        #if not user:
-        #     return []
-        #user_id = user["user_id"]
+
         cur.execute("SELECT * FROM apis WHERE user_id = ?", (user_id,))
-        #requests = cur.fetchall()
-        #return requests
-    #except Exception as e:
-        #print("Error Fetching API Requests:", e)
-        #return []
-    #finally:
-         #conn.close()
 
         conn.commit()
         
