@@ -84,5 +84,8 @@ alexL -- 2024-12-16 20:00
 jasonC -- 2024-12-16 23:20
  - updated profile page with styling to show past API requests in organized format
 
-jasonC -- 2024-12-16 12-49
+jasonC -- 2024-12-16 12:49
  - updated CSS linkage
+
+jasonC -- 2024-12-17 00:17
+ - updated design doc
