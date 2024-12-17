@@ -19,7 +19,7 @@ def create_db():
     # USER LOGIN TABLE
     cur.execute('''
         CREATE TABLE IF NOT EXISTS users (
-            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL
         );
@@ -34,7 +34,7 @@ def create_db():
         response TEXT,
         user_id INTEGER,
         img_file BLOB DEFAULT NULL,
-        FOREIGN KEY (user_id) REFERENCES logins(id) ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
     ''')
     # requests are not required, only used if user inputs an image URL
