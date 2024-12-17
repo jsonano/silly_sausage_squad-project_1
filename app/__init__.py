@@ -117,7 +117,7 @@ def get_api_data():
                     'clarifai' : description,
                     'pixabay' : videos
                 }
-                add_api_request(username, input_option, "Uploaded Image", json.dumps(api_dict), image_file_bytes=image_file.read())
+                add_api_request(username, input_option, "Uploaded Image", json.dumps(api_dict))
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
                 flash('Upload an image!', 'error')

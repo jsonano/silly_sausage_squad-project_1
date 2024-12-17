@@ -92,7 +92,7 @@ def return_user(user):
         conn.close()
         return user_info
 
-def add_api_request(username, user_request, request_type, response, img_file_bytes=None):
+def add_api_request(username, user_request, request_type, response):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
@@ -100,7 +100,7 @@ def add_api_request(username, user_request, request_type, response, img_file_byt
     # if img_file_bytes == None:
     #     cur.execute("INSERT INTO apis (user_request, request_type, response, user_id) VALUES (?, ?, ?, ?)", (user_request, request_type, response, user_id))
     # else:
-    cur.execute("INSERT INTO apis (user_request, request_type, response, user_id, img_file) VALUES (?, ?, ?, ?, ?)", (user_request, request_type, response, user_id, img_file_bytes))
+    cur.execute("INSERT INTO apis (user_request, request_type, response, user_id) VALUES (?, ?, ?, ?)", (user_request, request_type, response, user_id))
     conn.commit()
     conn.close()
 
