@@ -6,7 +6,7 @@
 }
 
 
-body {
+/* body {
     font-family: Arial, sans-serif;
     background-color: f4f4f4;
     color: #333;
@@ -23,7 +23,7 @@ header {
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-}
+} */
 
 .overview {
   font-family: Arial, sans-serif;
@@ -65,12 +65,12 @@ header {
 
 .flash-messages {
   position: fixed;
-  top: 20px; /* Distance from the top of the window */
+  top: 30px; /* Distance from the top of the window */
   left: 50%;
   transform: translateX(-50%); /* Center the messages horizontally */
   z-index: 1000; /* Ensure the messages appear above other content */
   width: 90%; /* Adjust width as needed */
-  max-width: 600px; /* Set a max-width for better presentation */
+  max-width: 400px; /* Set a max-width for better presentation */
 }
 
 .flash-message {
