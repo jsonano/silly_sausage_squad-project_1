@@ -96,10 +96,10 @@ def add_api_request(username, user_request, request_type, response, img_file_byt
     cur = conn.cursor()
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
     user_id = cur.fetchone()[0]
-    if img_file_bytes == None:
-        cur.execute("INSERT INTO apis (user_request, request_type, response, user_id) VALUES (?, ?, ?)", (user_request, request_type, response, user_id))
-    else:
-        cur.execute("INSERT INTO apis (user_request, request_type, response, user_id, img_file) VALUES (?, ?, ?, ?)", (user_request, request_type, response, user_id, img_file_bytes))
+    # if img_file_bytes == None:
+    #     cur.execute("INSERT INTO apis (user_request, request_type, response, user_id) VALUES (?, ?, ?, ?)", (user_request, request_type, response, user_id))
+    # else:
+    cur.execute("INSERT INTO apis (user_request, request_type, response, user_id, img_file) VALUES (?, ?, ?, ?, ?)", (user_request, request_type, response, user_id, img_file_bytes))
     conn.commit()
     conn.close()
 
@@ -123,10 +123,18 @@ def return_api_request(username): # returns all api requests under the same user
          #conn.close()
 
         conn.commit()
-        return cur.fetchall()
-        # for row in cur.fetchall():
-        #     print(row)
-        # print(cur.fetchall())
+        
+        requests = []
+        for row in cur.fetchall():
+            row_info = []
+            row_info.append(row[2]) # request_type
+            row_info.append(row[3]) # API response in dictionary format
+            if (row[5] != None):
+                row_info.append(row[5])
+            else:
+                row_info.append(None)
+            requests.append(row_info)
+        return requests
     except:
         print("API request does not exist.")
     finally:

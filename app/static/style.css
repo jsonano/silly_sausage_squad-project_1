@@ -119,6 +119,7 @@ color: #155724;
   text-align: left;
 }
 
+/* Styling for current site in the navigation bar */
 #current-link {
     font-weight: bold;
     color: #d3d3d3;
@@ -300,4 +301,10 @@ margin-bottom: 20px;
     background-color: #c82333;
     color: white;
     text-decoration: none;
+}
+
+/* Style for each request container */
+.request-container {
+    transition: transform 0.2s;
+    align-items: center;
 }

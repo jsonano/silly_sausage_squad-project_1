@@ -66,6 +66,7 @@ def profile():
 
     username = session["username"]
     user_requests = return_api_request(username)
+    print(user_requests)
 
     return render_template("profile.html", username=username, requests=user_requests)
 
@@ -104,7 +105,7 @@ def get_api_data():
                 'clarifai' : description,
                 'pixabay' : videos
             }
-            add_api_request(username, input_option, "Random Image", api_dict)
+            add_api_request(username, input_option, "Random Image", json.dumps(api_dict))
             return render_template("api_results.html", url=url, description=description, videos=videos)
         elif input_option == 'upload':
             if image_file:
@@ -115,7 +116,7 @@ def get_api_data():
                     'clarifai' : description,
                     'pixabay' : videos
                 }
-                add_api_request(username, input_option, "Uploaded Image", api_dict)
+                add_api_request(username, input_option, "Uploaded Image", json.dumps(api_dict), image_file_bytes=image_file)
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
                 flash('Upload an image!', 'error')
@@ -128,7 +129,7 @@ def get_api_data():
                     'clarifai' : description,
                     'pixabay' : videos
                 }
-                add_api_request(username, input_option, "Image Link", api_dict)
+                add_api_request(username, input_option, "Image Link", json.dumps(api_dict))
                 return render_template("api_results.html", url=url, description=description, videos=videos)
             else:
                 flash('Enter an url!', 'error')
@@ -140,7 +141,7 @@ def get_api_data():
                     'clarifai' : description,
                     'pixabay' : videos
                 }
-                add_api_request(username, input_option, "Selected Image", api_dict)
+                add_api_request(username, input_option, "Selected Image", json.dumps(api_dict))
                 return render_template("api_results.html", url=url, description=description, videos=videos)
         else:
             if search_query:
