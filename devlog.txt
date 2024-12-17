@@ -89,3 +89,6 @@ jasonC -- 2024-12-16 12:49
 
 jasonC -- 2024-12-17 00:17
  - updated design doc
+
+alexL -- 2024-12-17 00:20
+ - fixed uploading images to API requests
