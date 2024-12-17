@@ -9,9 +9,9 @@ leonH -- 2024-12-3 11:01
 jasonC -- 2024-12-4 12:08
  - Updated app/keys/readme with API key status.
 
- alexL -- 2024-12-4 10:33
-  - Added the html templates with starter code
-  - added navbar to home.html
+alexL -- 2024-12-4 10:33
+ - Added the html templates with starter code
+ - added navbar to home.html
 
 jasonC -- 2024-12-4 10:17
  - Implemented creating and adding users to DBs
