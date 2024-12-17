@@ -30,6 +30,7 @@ def home():
     if 'username' in session:
         username = session['username']
         return render_template('home.html', username=username)
+    
     return render_template('home.html')
 
 

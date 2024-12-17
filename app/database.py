@@ -1,6 +1,7 @@
 from flask import request, flash, session
 import sqlite3
 import os
+import json
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Database path setup
@@ -127,13 +128,17 @@ def return_api_request(username): # returns all api requests under the same user
         requests = []
         for row in cur.fetchall():
             row_info = []
-            row_info.append(row[2]) # request_type
-            row_info.append(row[3]) # API response in dictionary format
+            row_info.append(row[2])             # 0 
+            response_dict = json.loads(row[3])
+            row_info.append(response_dict["unsplash"]) # 1
+            row_info.append(response_dict["clarifai"]) # 2
+            row_info.append(response_dict["pixabay"])  # 3
             if (row[5] != None):
-                row_info.append(row[5])
+                row_info.append(row[5])         # 4
             else:
                 row_info.append(None)
             requests.append(row_info)
+            # print(row_info)
         return requests
     except:
         print("API request does not exist.")

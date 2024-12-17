@@ -80,3 +80,6 @@ alexL -- 2024-12-16 10:50
 alexL -- 2024-12-16 20:00
  - added uniform styling for the rest of the templates
  - fixed register styling 
+
+jasonC -- 2024-12-16 23:20
+ - updated profile page with styling to show past API requests in organized format

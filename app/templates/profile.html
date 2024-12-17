@@ -90,14 +90,25 @@
         <section class="past-image-list">
         {% if requests %}
             {% for request in requests %}
-                <div class="request-container border-3 rounded-2 shadow p-3" style="margin-left: 25%; margin-top: 2%; margin-bottom: 2%; width: 50%;">
+                <div class="request-container border-3 rounded-2 shadow p-3">
                     <h3> {{ request[0] }} </h3>
-                    {% if request[2] != None %}
-                        <div class="image-container">
-                            <img src="data:image/png;base64,{{ request['img_file'] | b64encode }}" alt="image result">
-                        </div>
+                    <div class="image-container">
+                    {% if request[4] != None %}
+                        <img src="data:image/png;base64,{{ request['img_file'] | b64encode }}" alt="image result">
                     {% endif %}
-                    
+                        <img src="{{ request[1] }}" alt="image result">
+                    </div>
+                    <p id="image-description"> {{ request[2] }} </p>
+                    <div style="margin-right: -10%; ">
+                    {% for video in request[3] %}
+                        {% if loop.index0 < 4 %}
+                            <video controls width="200" height="150">
+                                <source src="{{ video }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
@@ -107,10 +118,9 @@
     </main>
 </body>
 
-<footer>
-    <div class="my-auto fixed-bottom bg-dark">
-        <h6 class="text-secondary p-2" style="margin-bottom: -0.1%;">🌭 sIlLySaUsAgEsQuAD 2024</h6>
-    </div>
+<footer class="bg-dark text-secondary text-center py-2 fixed-bottom">
+    <p class="m-0">🌭 sIlLySaUsAgEsQuAD 2024</p>
 </footer>
 
 </html>
+
